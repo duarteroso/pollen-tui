@@ -1,0 +1,21 @@
+{
+  "name": "pollen-core",
+  "module": "src/index.tsx",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "bun run --feature DEBUG --watch src/index.ts",
+    "release": "bun run --watch src/index.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@opentui/core": "^0.4.3",
+    "@opentui/core-linux-x64": "^0.4.3",
+    "fast-xml-parser": "^5.9.3"
+  }
+}
