@@ -27,6 +27,10 @@ export class DataStore {
     return this.currentLocation;
   }
   async setLocation(loc: Location) {
+    if (this.currentLocation === loc) {
+      return;
+    }
+    //
     this.currentLocation = loc;
     bunChace.put(this.currentLocationKey, this.currentLocation);
     await this.updateReport();
@@ -39,6 +43,10 @@ export class DataStore {
     return this.currentLanguage;
   }
   async setLanguage(lang: Language) {
+    if (this.currentLanguage === lang) {
+      return;
+    }
+    //
     this.currentLanguage = lang;
     bunChace.put(this.currentLanguageKey, this.currentLanguage);
     await this.updateReport();
