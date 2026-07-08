@@ -45,8 +45,8 @@ export class DataStore {
     const newReport = await fetchData(loc, lang);
     if (newReport) {
       this.report = newReport;
-      this.notify();
     }
+    this.notify();
   }
 
   private notify() {
