@@ -13,6 +13,15 @@ export class LanguagePanel implements IPanel {
   private languageBoxes: Map<string, BoxRenderable> = new Map();
   private dataStopUnsubscribe: DataChangeUnsubscribe | null = null;
 
+  private updatePanel(): void {
+    const lang = DataStore.get().getLanguage()
+    updateBoxes(
+      this.languageBoxes,
+      (selection: string): boolean => {
+        return getEnumKey(Language, lang) === selection;
+      });
+  }
+
   build(): BoxRenderable {
     this.root = new ScrollBoxRenderable(renderer, {
       id: this.id,
@@ -32,7 +41,7 @@ export class LanguagePanel implements IPanel {
       const newLang = cycleEnum(Language, oldLang, value);
       await DataStore.get().setLanguage(newLang);
     }
-    
+
     // Create entries
     for (const [key, value] of Object.entries(Language) as [keyof typeof Language, Language][]) {
       const langBox = new BoxRenderable(renderer, {
@@ -47,14 +56,10 @@ export class LanguagePanel implements IPanel {
     }
     //
     this.dataStopUnsubscribe = DataStore.get().setListener(() => {
-      const lang = DataStore.get().getLanguage()
-      updateBoxes(
-        this.languageBoxes,
-        (selection: string): boolean => {
-          return getEnumKey(Language, lang) === selection;
-        });
+      this.updatePanel();
     })
     //
+    this.updatePanel();
     return this.root;
   }
 
