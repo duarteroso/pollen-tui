@@ -12,38 +12,55 @@ export class ReportPanel implements IPanel {
 
   private root: BoxRenderable | null = null;
   private dataStoreUnregister: DataChangeUnsubscribe | null = null;
-  private entriesId = "entries"
 
-  private buildText(content: string, bg?: string): BoxRenderable {
+  private cachedEntries: BoxRenderable[] = [];
+  private entryNameId: string = "nameId";
+  private entryLevelId: string = "levelId";
+  private entryForecastId: string = "forecastId";
+
+
+  private buildText(textId: string): BoxRenderable {
     const root = new BoxRenderable(renderer, {
       width: "33%",
       justifyContent: "center",
       alignItems: "center",
-      backgroundColor: bg,
     });
     //
     root.add(
       new TextRenderable(renderer, {
-        content: content,
+        id: textId,
         flexGrow: 1
       }));
     //
     return root;
   }
 
-  private buildEntry(entry: Entry): BoxRenderable {
-    const root = new BoxRenderable(renderer, {
-      id: entry.tag,
+  private createEntry(): void {
+    const entry = new BoxRenderable(renderer, {
       flexDirection: "row",
       justifyContent: "space-between",
       focusable: false
     });
     //
-    root.add(this.buildText(entry.name))
-    root.add(this.buildText(`${Level[entry.level]}`, LevelToColor(entry.level)))
-    root.add(this.buildText(`${getEnumKey(Forecast, entry.forecast)}`))
+    entry.add(this.buildText(this.entryNameId));
+    entry.add(this.buildText(this.entryLevelId));
+    entry.add(this.buildText(this.entryForecastId));
     //
-    return root;
+    this.cachedEntries.push(entry);
+    this.root?.add(entry);
+  }
+
+  private setupEntry(entry: Entry, entryBox: BoxRenderable): void {
+    var text = entryBox.findDescendantById(this.entryNameId) as TextRenderable;
+    text.content = entry.name;
+    //
+    text = entryBox.findDescendantById(this.entryLevelId) as TextRenderable;
+    text.content = `${Level[entry.level]}`;
+    var parent = text.parent as BoxRenderable;
+    parent.backgroundColor = LevelToColor(entry.level);
+    //
+    text = entryBox.findDescendantById(this.entryForecastId) as TextRenderable;
+    text.content = `${getEnumKey(Forecast, entry.forecast)}`;
   }
 
   private buildPanel() {
@@ -51,26 +68,23 @@ export class ReportPanel implements IPanel {
     if (!report) {
       return;
     }
-    // Clean up old data
-    const oldEntriesBox = this.root?.findDescendantById(this.entriesId);
-    if (oldEntriesBox) {
-      oldEntriesBox.destroyRecursively();
-    }
-    // Build new data
-    const newEntriesBox = new BoxRenderable(renderer, {
-      id: this.entriesId,
-      focusable: false
-    });
     //
     let entries: Entry[] = [];
     entries.push(...report.pollens)
     entries.push(...report.spores);
     const sortedEntries = entries.sort((a, b) => a.name.localeCompare(b.name));
-    for (const entry of sortedEntries) {
-      newEntriesBox.add(this.buildEntry(entry))
+    //
+    if (this.cachedEntries.length < entries.length) {
+      const count = entries.length - this.cachedEntries.length;
+      // Create missing
+      for (let index = 0; index < count; index++) {
+        this.createEntry();
+      }
     }
     //
-    this.root?.add(newEntriesBox);
+    for (let index = 0; index < sortedEntries.length; index++) {
+      this.setupEntry(sortedEntries[index]!, this.cachedEntries[index]!);
+    }
   }
 
   build(): BoxRenderable {
