@@ -13,6 +13,15 @@ export class LocationPanel implements IPanel {
   private locationBoxes: Map<string, BoxRenderable> = new Map();
   private dataStopUnsubscribe: DataChangeUnsubscribe | null = null;
 
+  private updatePanel(): void {
+    const loc = DataStore.get().getLocation()
+    updateBoxes(
+      this.locationBoxes,
+      (selection: string): boolean => {
+        return getEnumKey(Location, loc) === selection;
+      });
+  }
+
   build(): BoxRenderable {
     this.root = new ScrollBoxRenderable(renderer, {
       id: this.id,
@@ -32,7 +41,7 @@ export class LocationPanel implements IPanel {
       const newLoc = cycleEnum(Location, oldLoc, value);
       await DataStore.get().setLocation(newLoc)
     }
-    
+
     // Create entries
     for (const [key, value] of Object.entries(Location) as [keyof typeof Location, Location][]) {
       const locBox = new BoxRenderable(renderer, {
@@ -47,14 +56,10 @@ export class LocationPanel implements IPanel {
     }
     //
     this.dataStopUnsubscribe = DataStore.get().setListener(() => {
-      const loc = DataStore.get().getLocation()
-      updateBoxes(
-        this.locationBoxes,
-        (selection: string): boolean => {
-          return getEnumKey(Location, loc) === selection;
-        });
+      this.updatePanel();
     })
     //
+    this.updatePanel();
     return this.root;
   }
 
