@@ -16,6 +16,7 @@
   "dependencies": {
     "@opentui/core": "^0.4.3",
     "@opentui/core-linux-x64": "^0.4.3",
+    "bun-cache": "^2.0.0",
     "fast-xml-parser": "^5.9.3"
   }
 }

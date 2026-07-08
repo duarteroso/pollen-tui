@@ -7,6 +7,7 @@
       "dependencies": {
         "@opentui/core": "^0.4.3",
         "@opentui/core-linux-x64": "^0.4.3",
+        "bun-cache": "^2.0.0",
         "fast-xml-parser": "^5.9.3",
       },
       "devDependencies": {
@@ -45,6 +46,8 @@
     "ansi-regex": ["ansi-regex@6.2.2", "", {}, "sha512-Bq3SmSpyFHaWjPk8If9yc6svM8c56dB5BAtW4Qbw5jHTwwXXcTLoRMkpDJp6VL0XzlWaCHTXrkFURMYmD0sLqg=="],
 
     "anynum": ["anynum@1.0.1", "", {}, "sha512-N6//FLET/tXYNM/F6ABca1oH6fWB+KlTt909Le28WMDBk8oaT4vY17DCrwg2MvmuqUKt3Ni4N5dGJ/EoBgcO6A=="],
+
+    "bun-cache": ["bun-cache@2.0.0", "", { "peerDependencies": { "typescript": "^5.9.3" } }, "sha512-GGkgPN2BBP+vmUCZnsdyAupUdi3XQCpf/DfxO4eODTc1dNs+HLPTIhRsnhRy9XUT1QXpmIOqEXE+ORqQAaQnwQ=="],
 
     "bun-ffi-structs": ["bun-ffi-structs@0.2.4", "", { "peerDependencies": { "typescript": "^5" } }, "sha512-AJzsqoVFs1KBbJbWHIYrVZLDC3NhTqqh25awRXqzoLzmBAKr5oqk6+CwuYHAekKx+VBCYVohBoKuRq40dV+TYg=="],
 
