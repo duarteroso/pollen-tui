@@ -11,6 +11,8 @@ for (const target of targets) {
       DEBUG
     ],
     minify: true,
+    bytecode: true,
+    format: "esm",
     compile: {
       target: target.key as Bun.Build.CompileTarget,
       outfile: `./bin/${target.value.platform}/${target.value.arch}/pollen-cat`,
