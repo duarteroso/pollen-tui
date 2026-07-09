@@ -1,5 +1,5 @@
 {
-  "name": "pollen-core",
+  "name": "pollen-cat",
   "module": "src/index.tsx",
   "type": "module",
   "private": true,
